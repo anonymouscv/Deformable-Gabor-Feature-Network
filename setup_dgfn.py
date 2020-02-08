@@ -1,6 +1,5 @@
 import glob
 import os
-
 import torch
 from setuptools import find_packages
 from setuptools import setup
@@ -15,10 +14,10 @@ def get_extensions():
     this_dir = os.path.dirname(os.path.abspath(__file__))
     extensions_dir = os.path.join(this_dir, "dgfn", "src")
 
-    main_file = glob.glob(os.path.join(extensions_dir, "*.cpp"))
+    source_file = glob.glob(os.path.join(extensions_dir, "*.cpp"))
     source_cuda = glob.glob(os.path.join(extensions_dir,"*.cu"))
 
-    sources = main_file + source_cuda
+    sources = source_file + source_cuda
     extension = CppExtension
 
     extra_compile_args = {"cxx": []}
