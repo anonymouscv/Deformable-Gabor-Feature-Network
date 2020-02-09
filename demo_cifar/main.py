@@ -54,9 +54,7 @@ parser.add_argument('--noise', default=0, help='test add noise or not')
 parser.add_argument('--stage', default=8, type=int, metavar='N', help='8-16-32-64')
 args = parser.parse_args()
 
-#use_cuda = torch.cuda.is_available
 use_cuda = (args.gpu != None) and torch.cuda.is_available()
-#device = torch.device("cuda:{}".format(args.gpu) if use_cuda else "cpu")
 device = 'cuda' if torch.cuda.is_available  else 'cpu'
 '''
 if use_cuda:
@@ -69,7 +67,6 @@ writer_comment = '_'.join(['', 'ResNet18', str(args.method), 'lr', str(args.lr),
 if args.comment != '': writer_comment = '_'.join([writer_comment, args.comment])
 print(writer_comment)
 writer = SummaryWriter(comment=writer_comment)
-#writer = SummaryWriter()
 iteration = 0
 
 # Prepare the CIFAR dataset
@@ -78,7 +75,7 @@ if args.dataset == 'CIFAR10':
                                     std=[0.2023, 0.1994, 0.2010])
     train_transform = transforms.Compose([
         RandomCrop(32, padding=4, mode='reflect'),
-        #ownPadding(scale=0.7),
+        #DownPadding(scale=0.7),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         normalize
@@ -116,7 +113,6 @@ test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_si
                                 num_workers=args.workers, pin_memory=True, shuffle=True)
 
 # Load model
-#print('--',type(args.stages))
 model = resnet18(M=args.M, method=args.method, stages=stages).to(device)
 print(model)
 
@@ -218,4 +214,3 @@ print('Finished!')
 print('Best Test Precision@top1:{:.2f}'.format(best_prec1))
 writer.add_scalar('Best TOP1/Final', best_prec1, 0)
 writer.close()
-#writer2.close()

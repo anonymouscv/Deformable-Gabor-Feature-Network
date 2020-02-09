@@ -1,7 +1,6 @@
 import math
 import torch
 import torch.nn as nn
-
 import ipdb
 import sys
 sys.path.append("..")
@@ -81,7 +80,6 @@ class BasicBlock(nn.Module):
 
 
 class ResNet(nn.Module):
-
     def __init__(self, block, layers, stages=[8,16,32,64], num_classes=10, M=1, stage_with_method=[True, True, True, True], method='Conv'):
         methods = [method, method, method, method]
         expands = [False, False, False, False]
@@ -106,13 +104,11 @@ class ResNet(nn.Module):
         #self.conv1 = conv3x3(3, self.inplanes, stride=1, M=M, method=method_back, expand=True)
         self.bn1 = nn.BatchNorm2d(self.inplanes )
         self.relu = nn.ReLU(inplace=True)
-        print(expands)
         self.layer1 = self._make_layer(block, stages[0], layers[0], M=M, method=methods[0], expand = expands[0])
         self.layer2 = self._make_layer(block, stages[1], layers[1], stride=2, M=M, method=methods[1], expand = expands[1])
         self.layer3 = self._make_layer(block, stages[2], layers[2], stride=2, M=M, method=methods[2], expand = expands[2])
         self.layer4 = self._make_layer(block, stages[3], layers[3], stride=2, M=M, method=methods[3], expand = expands[3])
-        #self.avgpool = nn.AvgPool2d(4, stride=1)#todo
-        #self.adapool = nn.AdaptiveMaxPool2d(1)
+        #self.avgpool = nn.AvgPool2d(4, stride=1)
         self.adapool = nn.AdaptiveAvgPool2d(1)
         self.fc = nn.Linear(stages[3] * block.expansion * M, num_classes)
 
@@ -159,7 +155,6 @@ class ResNet(nn.Module):
 
 def resnet18(pretrained=False, M=1, method='Conv', set_method=[False, True, True, True],stages=[64,64,128,256]):
     """Constructs a ResNet-18 model.
-
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
     """
