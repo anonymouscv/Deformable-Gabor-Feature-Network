@@ -1,2 +1,2 @@
-python3 setup_dgfn.py build develop
+python setup_dgfn.py build develop
 
